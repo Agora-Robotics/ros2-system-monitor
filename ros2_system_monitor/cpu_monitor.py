@@ -222,9 +222,9 @@ class CPUMonitor(Node):
                 return DiagnosticStatus.ERROR, vals
 
             upvals = stdout.split()
-            load1 = float(upvals[-3].rstrip(','))/self._num_cores
-            load5 = float(upvals[-2].rstrip(','))/self._num_cores
-            load15 = float(upvals[-1])/self._num_cores
+            load1 = float(upvals[-3].rstrip(',').replace(',', '.')) / self._num_cores
+            load5 = float(upvals[-2].rstrip(',').replace(',', '.'))/self._num_cores
+            load15 = float(upvals[-1].rstrip(',').replace(',', '.'))/self._num_cores
 
             # Give warning if we go over load limit
             if load1 > self._cpu_load1_warn or load5 > self._cpu_load5_warn:
@@ -303,7 +303,7 @@ class CPUMonitor(Node):
                 system = lst[5]
 
                 core_level = DiagnosticStatus.OK
-                usage = (float(user)+float(nice))*1e-2
+                usage = (float(user.rstrip(',').replace(',', '.'))+float(nice.rstrip(',').replace(',', '.')))*1e-2
                 if usage > 10.0:  # wrong reading, use old reading instead
                     self.get_logger().warning(
                         f"Read CPU usage of {usage} percent. "
